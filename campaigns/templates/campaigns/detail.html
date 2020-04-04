@@ -1,0 +1,6 @@
+<h1>{{ campaign.title }}</h1>
+<ul>
+{% for session in campaign.session_set.all %}
+    <li>{{ session.description }}</li>
+{% endfor %}
+</ul>
