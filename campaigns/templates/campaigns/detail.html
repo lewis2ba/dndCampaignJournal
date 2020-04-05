@@ -1,6 +1,15 @@
 <h1>{{ campaign.title }}</h1>
 <ul>
 {% for session in campaign.session_set.all %}
-    <li>{{ session.description }}</li>
+    <li><a href="{% url 'campaigns:sessionDetail' campaign.id session.id %}">{{ session.date }} - {{ session.description }}</a></li>
 {% endfor %}
 </ul>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<form action="{% url 'campaigns:sessionNew' campaign.id %}" method="post">
+	{% csrf_token %}
+<label>Date</label><input type="date" id="sessionDate" name="sessionDate"></input><br>
+<label>Description</label> <textarea id="sessionDescr" name="sessionDescr"></textarea><br>
+<input type="submit" value="Submit">
+</form>
+

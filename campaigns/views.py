@@ -1,8 +1,9 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 
 
-from .models import Campaign
+from .models import Campaign, Session
 # Create your views here.
 
 def index(request):
@@ -13,14 +14,17 @@ def index(request):
 	return render(request, 'campaigns/index.html',context)
 
 def campaignDetail(request, campaign_id):
-		campaign = get_object_or_404(Campaign, pk=campaign_id)
-		return render(request, 'campaigns/detail.html', {'campaign': campaign})
+	campaign = get_object_or_404(Campaign, pk=campaign_id)
+	return render(request, 'campaigns/detail.html', {'campaign': campaign})
 
-def sessionsView(request, campaign_id):
-	response = "You're looking at the sessions for the campaign %s."	
-	return HttpResponse(response % campaign_id)
+def sessionNew(request, campaign_id):
+	campaign = get_object_or_404(Campaign, pk=campaign_id)
+	session = campaign.session_set.create(date =request.POST['sessionDate'],description=request.POST['sessionDescr'])
+	session.save()
+	return HttpResponseRedirect(reverse('campaigns:campaignDetail', args=(campaign.id,)))
 
-def sessionDetail(request, campaign_id, session_id):
-	response = "You're looking at session %s."
-	return HttpResponse(response % session_id)
+def sessionDetail(request, campaign_id, session_id): 
+	campaign = get_object_or_404(Campaign, pk=campaign_id)
+	session = get_object_or_404(Session, pk=session_id)
+	return render(request, 'sessions/detail.html', {'campaign': campaign,'session': session})
  

@@ -1,7 +1,8 @@
+<h1>Campaign Journal</h1>
 {% if latest_campaigns_list %}
     <ul>
     {% for campaign in latest_campaigns_list %}
-        <li><a href="/campaigns/{{ campaign.id }}/">{{ campaign.title }}</a></li>
+        <li><a href="{% url 'campaigns:campaignDetail' campaign.id %}">{{ campaign.title }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
